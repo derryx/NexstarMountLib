@@ -336,7 +336,7 @@ inline void NexstarMessageSender::handleGpsLinked()
 	message.msg.header.length=calc_msg_length(1);
 	gps->get_position(0,0,&fix_age);
 	
-	if (fix_age==gps->GPS_INVALID_AGE || fix_age>5000) {
+	if (fix_age==gps->GPS_INVALID_AGE || fix_age>5000 || gps->satellites()==gps->GPS_INVALID_SATELLITES || gps->satellites()<4) {
 		message.msg.payload[0]=0x00;
 	} else {
 		message.msg.payload[0]=0x01;
@@ -375,7 +375,7 @@ inline void NexstarMessageSender::handleGetSoftwareVersion()
 {
 	message.msg.header.length=calc_msg_length(2);
 	message.msg.payload[0]=0x01; //Major Version
-	message.msg.payload[1]=0x00; //Minor Version
+	message.msg.payload[1]=0x01; //Minor Version
 }
 
 inline void NexstarMessageSender::degToBytes(float* deg)
